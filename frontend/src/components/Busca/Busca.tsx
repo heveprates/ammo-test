@@ -1,14 +1,33 @@
 import { Input } from 'antd';
 import React, { useState } from 'react';
 import { useQueryStringStore } from '../../stores/QueryStringStore';
+import { fetchAPI } from '../../services/fetchProdutosAPI';
+import { useProdutoListaStore } from '../../stores/ProdutoListaStore';
 
 function Busca() {
   const [inputText, setInputText] = useState('');
-  const novoTermo = useQueryStringStore((state) => state.termo);
-  const setTermo = useQueryStringStore((state) => state.setTermo);
+  const [novoTermo, setTermo] = useQueryStringStore((state) => [
+    state.termo,
+    state.setTermo,
+  ]);
+  const [porPagina, setListaTodosProdutos] = useProdutoListaStore((state) => [
+    state.porPagina,
+    state.setListaTodosProdutos,
+  ]);
 
-  const onSearch = (value: string) => {
+  const onSearch = async (value: string) => {
     setTermo(value);
+    const response = await fetchAPI({
+      pagina: 1,
+      porPagina,
+      busca: value,
+    });
+    setListaTodosProdutos({
+      totalProdutos: response.total,
+      porPagina,
+      paginaAtual: 1,
+      produtos: response.produtos,
+    });
   };
 
   const handleChange = (value: string) => {

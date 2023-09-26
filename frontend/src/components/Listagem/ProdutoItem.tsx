@@ -1,10 +1,10 @@
 import { List, Space, Typography } from 'antd';
-import { Produto } from '../../stores/ProdutoListaStore';
+import { ProdutoType } from '../../stores/ProdutoListaStore';
 import { parsePreco } from '../../tools/parsePreco';
 import ProdutoImagens from './ProdutoImagens';
 
 type ProdutoItemProps = {
-  produto: Produto;
+  produto: ProdutoType;
 };
 
 function ProdutoItem({ produto }: ProdutoItemProps) {

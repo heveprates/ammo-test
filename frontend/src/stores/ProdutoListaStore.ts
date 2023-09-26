@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type Produto = {
+export type ProdutoType = {
   id: string;
   nome: string;
   descricao: string;
@@ -12,22 +12,26 @@ export type Produto = {
 
 type State = {
   listaProdutos: {
-    [key: number]: Produto[];
+    [key: number]: ProdutoType[];
   };
   totalProdutos: number;
-  porPaginas: number;
+  porPagina: number;
   paginaAtual: number;
 };
 
 type Actions = {
   setListaTodosProdutos: (
-    state: Parameters<typeof setListaTodosProdutos>[0],
+    data: Parameters<typeof setListaTodosProdutos>[0],
   ) => void;
-  setPaginaAtual: (state: Parameters<typeof setPaginaAtual>[0]) => void;
+  setListaPaginaAtual: (
+    data: Parameters<typeof setListaPaginaAtual>[0],
+  ) => void;
+  setPorPagina: (data: number) => void;
+  setPaginaAtual: (data: number) => void;
 };
 
 const setListaTodosProdutos = (
-  data: Omit<State, 'listaProdutos'> & { produtos: Produto[] },
+  data: Omit<State, 'listaProdutos'> & { produtos: ProdutoType[] },
 ): State => {
   return {
     ...data,
@@ -35,9 +39,9 @@ const setListaTodosProdutos = (
   };
 };
 
-const setPaginaAtual = (
+const setListaPaginaAtual = (
   data: {
-    listaProdutos: Produto[];
+    listaProdutos: ProdutoType[];
     paginaAtual: number;
   },
   state: State,
@@ -55,8 +59,11 @@ const setPaginaAtual = (
 export const useProdutoListaStore = create<State & Actions>((set) => ({
   listaProdutos: {},
   totalProdutos: 0,
-  porPaginas: 0,
+  porPagina: 0,
   paginaAtual: 0,
   setListaTodosProdutos: (data) => set(setListaTodosProdutos(data)),
-  setPaginaAtual: (data) => set((state) => setPaginaAtual(data, state)),
+  setListaPaginaAtual: (data) =>
+    set((state) => setListaPaginaAtual(data, state)),
+  setPorPagina: (data) => set({ porPagina: data }),
+  setPaginaAtual: (data) => set({ paginaAtual: data }),
 }));
