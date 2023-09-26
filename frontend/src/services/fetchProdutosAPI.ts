@@ -1,5 +1,7 @@
 import { ProdutoType } from '../stores/ProdutoListaStore';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 type FetchProdutosParams = {
   busca?: string;
   pagina: number;
@@ -9,12 +11,12 @@ type FetchProdutosParams = {
 function mapProdutoAPItoProduto(produto: any): ProdutoType {
   return {
     id: produto.id,
-    nome: produto.title,
-    categoria: produto.category,
-    descricao: produto.description,
-    imagens: produto.images,
-    precoOriginal: produto.price,
-    precoPromocional: produto.price * (1 - produto.discountPercentage / 100),
+    nome: produto.nome,
+    categoria: produto.categoria,
+    descricao: produto.descricao,
+    imagens: produto.imagens,
+    precoOriginal: produto.precoOriginal,
+    precoPromocional: produto.precoPromocional,
   };
 }
 
@@ -27,12 +29,11 @@ export const fetchAPI = async ({
   produtos: ProdutoType[];
 }> => {
   const params = new URLSearchParams();
-  let url = 'https://dummyjson.com/products';
+  let url = `${API_URL}/produtos`;
   params.append('limit', String(porPagina));
-  params.append('skip', String((pagina - 1) * porPagina));
+  params.append('offset', String((pagina - 1) * porPagina));
   if (busca) {
-    url += '/search';
-    params.append('q', busca);
+    params.append('search', busca);
   }
 
   const response = await fetch(`${url}?${params}`);

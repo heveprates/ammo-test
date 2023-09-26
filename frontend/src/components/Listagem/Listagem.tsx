@@ -6,7 +6,9 @@ export default function Listagem() {
   const data = useProdutoListaStore(
     (state) => state.listaProdutos[state.paginaAtual],
   );
-  const totalProdutos = useProdutoListaStore((state) => state.totalProdutos);
+  const [totalProdutos] = useProdutoListaStore((state) => [
+    state.totalProdutos,
+  ]);
 
   return (
     <>

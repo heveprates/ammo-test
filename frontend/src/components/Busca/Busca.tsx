@@ -10,23 +10,27 @@ function Busca() {
     state.termo,
     state.setTermo,
   ]);
-  const [porPagina, setListaTodosProdutos] = useProdutoListaStore((state) => [
-    state.porPagina,
-    state.setListaTodosProdutos,
-  ]);
+  const [porPagina, setListaTodosProdutos, setCarregandoLista] =
+    useProdutoListaStore((state) => [
+      state.porPagina,
+      state.setListaTodosProdutos,
+      state.setCarregandoLista,
+    ]);
 
-  const onSearch = async (value: string) => {
+  const onSearch = (value: string) => {
     setTermo(value);
-    const response = await fetchAPI({
+    setCarregandoLista(true);
+    fetchAPI({
       pagina: 1,
       porPagina,
       busca: value,
-    });
-    setListaTodosProdutos({
-      totalProdutos: response.total,
-      porPagina,
-      paginaAtual: 1,
-      produtos: response.produtos,
+    }).then((response) => {
+      setListaTodosProdutos({
+        totalProdutos: response.total,
+        porPagina,
+        paginaAtual: 1,
+        produtos: response.produtos,
+      });
     });
   };
 

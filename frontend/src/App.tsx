@@ -3,26 +3,33 @@ import { fetchAPI } from './services/fetchProdutosAPI';
 import { useProdutoListaStore } from './stores/ProdutoListaStore';
 import React from 'react';
 
-const unsubscribe = useProdutoListaStore.subscribe(async (state) => {
+const unsubscribe = useProdutoListaStore.subscribe((state) => {
+  const states = useProdutoListaStore.getState();
+  if (states.isCarregandoLista) {
+    return;
+  }
   unsubscribe();
-  const response = await fetchAPI({
+  states.setCarregandoLista(true);
+  fetchAPI({
     pagina: state.paginaAtual,
     porPagina: state.porPagina,
-  });
-  useProdutoListaStore.getState().setListaTodosProdutos({
-    totalProdutos: response.total,
-    porPagina: state.porPagina,
-    paginaAtual: state.paginaAtual,
-    produtos: response.produtos,
+  }).then((response) => {
+    states.setListaTodosProdutos({
+      totalProdutos: response.total,
+      porPagina: state.porPagina,
+      paginaAtual: state.paginaAtual,
+      produtos: response.produtos,
+    });
   });
 });
 
 function App() {
-  const setListaTodosProdutos = useProdutoListaStore(
-    (state) => state.setListaTodosProdutos,
+  const [setListaTodosProdutos, setCarregandoLista] = useProdutoListaStore(
+    (state) => [state.setListaTodosProdutos, state.setCarregandoLista],
   );
 
   React.useEffect(() => {
+    setCarregandoLista(true);
     setListaTodosProdutos({
       produtos: [],
       paginaAtual: 1,

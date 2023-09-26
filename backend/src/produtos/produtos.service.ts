@@ -63,6 +63,9 @@ export class ProdutosService {
       },
       take: limit,
       skip: offset,
+      orderBy: {
+        id: 'asc',
+      },
     });
   }
 

@@ -17,6 +17,7 @@ type State = {
   totalProdutos: number;
   porPagina: number;
   paginaAtual: number;
+  isCarregandoLista: boolean;
 };
 
 type Actions = {
@@ -26,15 +27,17 @@ type Actions = {
   setListaPaginaAtual: (
     data: Parameters<typeof setListaPaginaAtual>[0],
   ) => void;
-  setPorPagina: (data: number) => void;
-  setPaginaAtual: (data: number) => void;
+  setCarregandoLista: (data: boolean) => void;
 };
 
 const setListaTodosProdutos = (
-  data: Omit<State, 'listaProdutos'> & { produtos: ProdutoType[] },
+  data: Omit<State, 'listaProdutos' | 'isCarregandoLista'> & {
+    produtos: ProdutoType[];
+  },
 ): State => {
   return {
     ...data,
+    isCarregandoLista: false,
     listaProdutos: { [data.paginaAtual]: data.produtos },
   };
 };
@@ -49,6 +52,7 @@ const setListaPaginaAtual = (
   return {
     ...state,
     paginaAtual: data.paginaAtual,
+    isCarregandoLista: false,
     listaProdutos: {
       ...state.listaProdutos,
       [data.paginaAtual]: data.listaProdutos,
@@ -61,9 +65,9 @@ export const useProdutoListaStore = create<State & Actions>((set) => ({
   totalProdutos: 0,
   porPagina: 0,
   paginaAtual: 0,
+  isCarregandoLista: false,
   setListaTodosProdutos: (data) => set(setListaTodosProdutos(data)),
   setListaPaginaAtual: (data) =>
     set((state) => setListaPaginaAtual(data, state)),
-  setPorPagina: (data) => set({ porPagina: data }),
-  setPaginaAtual: (data) => set({ paginaAtual: data }),
+  setCarregandoLista: (data) => set({ isCarregandoLista: data }),
 }));

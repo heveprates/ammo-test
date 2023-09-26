@@ -6,23 +6,27 @@ import { useQueryStringStore } from '../../stores/QueryStringStore';
 
 function PorPagina() {
   const [input, setInput] = useState('10');
-  const [porPagina, setListaTodosProdutos] = useProdutoListaStore((state) => [
-    state.porPagina,
-    state.setListaTodosProdutos,
-  ]);
+  const [porPagina, setListaTodosProdutos, setCarregandoLista] =
+    useProdutoListaStore((state) => [
+      state.porPagina,
+      state.setListaTodosProdutos,
+      state.setCarregandoLista,
+    ]);
   const busca = useQueryStringStore((state) => state.termo);
 
-  const fetchProdutos = async (porPagina: number) => {
-    const response = await fetchAPI({
+  const fetchProdutos = (porPagina: number) => {
+    setCarregandoLista(true);
+    fetchAPI({
       pagina: 1,
       porPagina,
       busca,
-    });
-    setListaTodosProdutos({
-      totalProdutos: response.total,
-      porPagina,
-      paginaAtual: 1,
-      produtos: response.produtos,
+    }).then((response) => {
+      setListaTodosProdutos({
+        totalProdutos: response.total,
+        porPagina,
+        paginaAtual: 1,
+        produtos: response.produtos,
+      });
     });
   };
 
