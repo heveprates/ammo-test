@@ -13,10 +13,10 @@ export default function Home() {
         <Layout.Content style={styles.contentStyle}>
           <Space direction="vertical" size="large" style={{ width: '100%' }}>
             <Row>
-              <Col span={18}>
+              <Col flex="auto">
                 <Typography.Title level={3}>Teste Hévellyn</Typography.Title>
               </Col>
-              <Col span={6}>
+              <Col flex="none">
                 <Busca />
               </Col>
             </Row>
@@ -26,16 +26,12 @@ export default function Home() {
               </Col>
             </Row>
             <Listagem />
-            <Row align="middle">
-              <Col span={12}>
+            <Row align="middle" justify={'space-between'}>
+              <Col flex="auto">
                 <PorPagina />
               </Col>
-              <Col span={12}>
-                <Row justify="end">
-                  <Col>
-                    <Paginacao />
-                  </Col>
-                </Row>
+              <Col flex="none">
+                <Paginacao />
               </Col>
             </Row>
           </Space>

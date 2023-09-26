@@ -41,6 +41,7 @@ function Busca() {
   return (
     <>
       <Input.Search
+        style={{ width: 260 }}
         placeholder="Pesquise por um produto"
         allowClear
         value={inputText}

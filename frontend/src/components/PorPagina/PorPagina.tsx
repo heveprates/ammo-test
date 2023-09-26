@@ -39,7 +39,7 @@ function PorPagina() {
     <>
       <Select
         defaultValue={'10'}
-        style={{ width: 220 }}
+        style={{ width: 120 }}
         onChange={handleChange}
         value={input}
         options={[

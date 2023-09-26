@@ -13,7 +13,18 @@ function ProdutoItem({ produto }: ProdutoItemProps) {
       <List.Item.Meta
         avatar={<ProdutoImagens imagens={produto.imagens} />}
         title={produto.nome}
-        description={produto.categoria + ' - ' + produto.descricao}
+        description={
+          <Typography.Paragraph
+            type="secondary"
+            ellipsis={{ rows: 2, expandable: false }}
+          >
+            <Typography.Text keyboard>{produto.categoria}</Typography.Text>
+            <Typography.Text type="secondary">
+              {' '}
+              {produto.descricao}
+            </Typography.Text>
+          </Typography.Paragraph>
+        }
       />
       <Space size={'small'}>
         <Typography.Text delete>
